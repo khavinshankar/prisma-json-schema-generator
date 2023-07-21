@@ -68,6 +68,7 @@
         "clean": "rm -rf dist",
         "type-check": "tsc",
         "build": "npm run clean && swc src --out-dir dist --extensions '.ts'",
+        "prepare": "npm run build",
         "test": "jest src",
         "lint": "eslint --ext .ts \"src/**/*.ts\"",
         "lint:fix": "npm run lint -- --fix",
