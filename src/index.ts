@@ -4,6 +4,8 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { parseEnvValue } from '@prisma/internals'
 import YAML from 'yaml'
+import { DEFAULT_DEFINITIONS_ROOT } from './generator/constants'
+import { definitionsRootObject } from './generator/helpers'
 
 generatorHandler({
     onManifest() {
@@ -13,7 +15,10 @@ generatorHandler({
         }
     },
     async onGenerate(options) {
-        const jsonSchema = transformDMMF(options.dmmf, options.generator.config)
+        const jsonSchema = transformDMMF(options.dmmf, {
+            definitionsRoot: DEFAULT_DEFINITIONS_ROOT,
+            ...options.generator.config,
+        })
         if (options.generator.output) {
             const outputDir =
                 // This ensures previous version of prisma are still supported

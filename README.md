@@ -64,6 +64,7 @@ The generator currently supports a few options
 | includeRequiredFields    | "false"       | If this flag is `"true"` all required scalar prisma fields that do not have a default value, will be added to the `required` properties field for that schema definition.                              |
 | persistOriginalType      | "false"       | If this flag is `"true"` the original type will be outputed under the property key "originalType"                                                                                                      |
 | toYaml    | "false"       | If this flag is `"true"` the output will be a yaml file. _(The JSON schema is simply converted into YAML and outputed.)_                              |
+| definitionsRoot    | "#/definitions/"       | This option helps us to define a custom root hierarchy of where the schemas should go.                              |
 
 **3. Run generation**
 

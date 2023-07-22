@@ -1,5 +1,17 @@
 import { DMMF } from '@prisma/generator-helper'
-import { JSONSchema7Definition } from 'json-schema'
+import { JSONSchema7, JSONSchema7Definition } from 'json-schema'
+
+export type JSONSchema7DefinitionExtended =
+    | JSONSchema7Definition
+    | {
+          [key: string]: JSONSchema7DefinitionExtended
+      }
+
+export type JSONSchema7Extended =
+    | JSONSchema7
+    | {
+          [key: string]: JSONSchema7DefinitionExtended | undefined
+      }
 
 export interface PropertyMetaData {
     required: boolean
@@ -20,4 +32,5 @@ export interface TransformOptions {
     includeRequiredFields?: 'true' | 'false'
     persistOriginalType?: 'true' | 'false'
     toYaml?: 'true' | 'false'
+    definitionsRoot: string
 }

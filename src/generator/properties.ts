@@ -1,5 +1,4 @@
 import { DMMF } from '@prisma/generator-helper'
-import { DEFINITIONS_ROOT } from './constants'
 import {
     assertNever,
     isEnumType,
@@ -111,13 +110,13 @@ function getFormatByDMMFType(
 
 function getJSONSchemaForPropertyReference(
     field: DMMF.Field,
-    { schemaId, persistOriginalType }: TransformOptions,
+    { schemaId, persistOriginalType, definitionsRoot }: TransformOptions,
 ): JSONSchema7 {
     const notNullable = field.isRequired || field.isList
 
     assertFieldTypeIsString(field.type)
 
-    const typeRef = `${DEFINITIONS_ROOT}${field.type}`
+    const typeRef = `${definitionsRoot}${field.type}`
     const ref = { $ref: schemaId ? `${schemaId}${typeRef}` : typeRef }
     return notNullable
         ? ref

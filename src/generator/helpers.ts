@@ -1,5 +1,7 @@
 import type { DMMF } from '@prisma/generator-helper'
 
+import { JSONSchema7DefinitionExtended, JSONSchema7Extended } from './types'
+
 export type PrismaPrimitive =
     | 'String'
     | 'BigInt'
@@ -33,4 +35,19 @@ export function assertNever(value: never): never {
 
 export function toCamelCase(name: string): string {
     return name.substring(0, 1).toLowerCase() + name.substring(1)
+}
+
+export function definitionsRootObject(
+    path: string,
+    value: JSONSchema7DefinitionExtended = {},
+): JSONSchema7DefinitionExtended {
+    return path
+        .replace(/^#\/(.+)\/$/, '$1')
+        .split('/')
+        .reduceRight(
+            (obj, key) => ({
+                [key]: obj,
+            }),
+            value,
+        )
 }

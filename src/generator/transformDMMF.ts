@@ -1,17 +1,20 @@
 import type { DMMF } from '@prisma/generator-helper'
-import type { JSONSchema7, JSONSchema7Definition } from 'json-schema'
+import type { JSONSchema7Definition } from 'json-schema'
 import { TransformOptions } from './types'
-import { DEFINITIONS_ROOT } from './constants'
-import { toCamelCase } from './helpers'
+import { toCamelCase, definitionsRootObject } from './helpers'
 
 import { getInitialJSON } from './jsonSchema'
 import { getJSONSchemaModel } from './model'
+import { JSONSchema7Extended } from './types'
 
-function getPropertyDefinition({ schemaId }: TransformOptions) {
+function getPropertyDefinition({
+    schemaId,
+    definitionsRoot,
+}: TransformOptions) {
     return (
         model: DMMF.Model,
     ): [name: string, reference: JSONSchema7Definition] => {
-        const ref = `${DEFINITIONS_ROOT}${model.name}`
+        const ref = `${definitionsRoot}${model.name}`
         return [
             toCamelCase(model.name),
             {
@@ -23,11 +26,11 @@ function getPropertyDefinition({ schemaId }: TransformOptions) {
 
 export function transformDMMF(
     dmmf: DMMF.Document,
-    transformOptions: TransformOptions = {},
-): JSONSchema7 {
+    transformOptions: TransformOptions,
+): JSONSchema7Extended {
     // TODO: Remove default values as soon as prisma version < 3.10.0 doesn't have to be supported anymore
     const { models = [], enums = [], types = [] } = dmmf.datamodel
-    const initialJSON = getInitialJSON()
+    const initialJSON = getInitialJSON(transformOptions.definitionsRoot)
     const { schemaId } = transformOptions
 
     const modelDefinitionsMap = models.map(
@@ -51,7 +54,10 @@ export function transformDMMF(
     return {
         ...(schemaId ? { $id: schemaId } : null),
         ...initialJSON,
-        definitions,
+        ...(definitionsRootObject(
+            transformOptions.definitionsRoot,
+            definitions,
+        ) as object),
         properties,
-    }
+    } as JSONSchema7Extended
 }

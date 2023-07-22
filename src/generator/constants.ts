@@ -1,1 +1,1 @@
-export const DEFINITIONS_ROOT = '#/definitions/'
+export const DEFAULT_DEFINITIONS_ROOT = '#/definitions/'

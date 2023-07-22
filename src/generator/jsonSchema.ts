@@ -1,7 +1,7 @@
-import { JSONSchema7 } from 'json-schema'
+import { definitionsRootObject } from './helpers'
 
-export const getInitialJSON = (): JSONSchema7 => ({
+export const getInitialJSON = (definitionsRoot: string) => ({
     $schema: 'http://json-schema.org/draft-07/schema#',
-    definitions: {},
     type: 'object',
+    ...(definitionsRootObject(definitionsRoot) as object),
 })
